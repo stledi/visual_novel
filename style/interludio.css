@@ -4,6 +4,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  overflow: hidden;
 }
 
 section {
@@ -15,11 +16,58 @@ section {
   margin-top: 50px;
 }
 
+section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .seta {
   width: 0;
 }
 
 .character {
-  width: 100%; height: 100%;
-  background-color: black;
+  width: 300px;
+}
+
+.tentaculo {
+  display: none;
+  width: 100vw; height: 100vh;
+  position: absolute;
+  z-index: -1;
+}
+.tentaculo .esquerda {
+  height: 100vh; width: fit-content; 
+  position: absolute;
+  transform: translateX(-100%);
+  min-width: 400px;
+  object-fit: cover;
+  animation: aparecer-esquerda 5s ease-in-out forwards;
+}
+.tentaculo .direita {
+  height: 100vh; width: fit-content;
+  min-width: 400px;
+  object-fit: cover;
+  left: 100%;
+  transform: translateX(-100%);
+  position: absolute;
+  animation: aparecer-direita 5s ease-in-out forwards;
+}
+
+@keyframes aparecer-esquerda {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes aparecer-direita {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }

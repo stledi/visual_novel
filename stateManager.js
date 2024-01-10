@@ -1,17 +1,23 @@
-function proceedTo(chapter) {
+function proceedTo(chapter, legitTag) {
   localStorage.setItem('hasToLoad', '0');
-  localStorage.setItem('isLegit', chapter);
-  window.location.href = `../chapters/chapter${chapter}.html`;
+  localStorage.setItem('isLegit', legitTag);
+  window.location.href = `${chapter}/index.html`;
 }
 
-function save(currentChapter, currentChapterStep, sectionState) {
+function loadChapter(chapter, legitTag) {
+  localStorage.setItem('hasToLoad', '1');
+  localStorage.setItem('isLegit', legitTag);
+  window.location.href = `${chapter}/index.html`;
+} 
+
+function save(currentChapter, currentPart, partState) {
   localStorage.setItem('saveState', JSON.stringify({
     currentChapter: currentChapter,
-    currentChapterStep: currentChapterStep,
-    state: sectionState,
-    background: document.body.style.backgroundImage, 
+    currentPart: currentPart,
+    partState: partState,
+    background: UI.currentBackground, 
     character: document.querySelector('.character').src, 
-    music: sectionState.music,
+    music: partState.music,
   }));
   console.log(localStorage.getItem('saveState'))
 }
@@ -21,11 +27,15 @@ function loadUI(saveState) {
     console.log(saveState);
     if (saveState.background != undefined) document.body.style.backgroundImage =  saveState.background;
     if (saveState.character != undefined) document.querySelector('.character').src = saveState.character;
-
-    window.addEventListener('click', async function eventHandler(ev) { 
-      playMusic(saveState.music);
+    if (saveState.background != undefined) handleBackground(saveState.background);
+    if (saveState.music != "") {
+      window.addEventListener('click', async function eventHandler(ev) { 
+        playMusic(saveState.music);
+        this.removeEventListener('click', eventHandler);
+        res();
+      })
+    } else {
       res();
-      this.removeEventListener('click', eventHandler);
-    })
-  });
+    }
+  })
 }

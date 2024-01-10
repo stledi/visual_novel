@@ -8,6 +8,27 @@ const UI = {
   isPaused: false, onSaveButtonPressed: undefined,
   setOnSaveButtonPressed(fun) {
     this.onSaveButtonPressed = fun;
+  },
+  currentBackground: '',
+}
+
+function handleBackground(background) {
+  UI.currentBackground = background;
+  if (!background) return;
+
+  if (background.includes('show')) {
+    document.querySelector('.'+background.split(' ')[1]).style.display = 'block';
+
+  } else if (background === 'none') {
+    document.querySelector('.background').display = 'none';
+    UI.currentBackground = '';
+
+  } else if (background.includes('hide')) {
+    document.querySelector('.'+background.split(' ')[1]).style.display = 'none';
+    UI.currentBackground = '';
+
+  } else {
+    document.querySelector('.background').style.backgroundImage = `url(${background})`;
   }
 }
 

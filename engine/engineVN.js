@@ -6,7 +6,6 @@ const nameBox = document.querySelector('.character-name')
 
 const dialogueBox = document.querySelector('.dialogue');
 
-let music; 
 
 function delay(ms) {
   return new Promise(res => setTimeout(res, ms));
@@ -34,6 +33,7 @@ function untilClick() {
 ///////////////////////////////////////////////////////
 function Story(story) {
   let currentStep = 0;
+  let currentBackground;
 
   let shouldEnd = false;
   let onend;
@@ -75,44 +75,65 @@ function Story(story) {
   
   async function executeDialogue(step) {  
     let bunch = '';
-    if (step.dialogue.delay) await delay(step.dialogue.delay);
     let shouldSkip = false;
     const dialogueText = step.dialogue.content;
     nameBox.textContent = step.name;
     dialogueBox.textContent = '';
+    if (step.dialogue.delay) await delay(step.dialogue.delay);
     
     
     const voice = new Audio(step.dialogue.voice);
-
-    for (let section = 0; section < dialogueText.split("|").length; section++) {
+    
+    let dialogueParts = dialogueText.split('|');
+    for (let part = 0; part < dialogueParts.length; part++) {
       voice.play();
+      bunch += dialogueParts[part];
       window.addEventListener('click', async function eventHandler(ev) { 
         ev.stopPropagation();
         shouldSkip = true;
         this.removeEventListener('click', eventHandler);
       })
+
+      let hasBold = false; 
+      let boldStart = 0;
+      let boldEnd = 0;
+      if (dialogueParts[part].includes('<b>')) {
+        boldStart = dialogueParts[part].indexOf('<b>') - 2;
+        boldEnd = dialogueParts[part].lastIndexOf('</b>') - 3;
+        dialogueParts[part] = dialogueParts[part].replace('<b>', '')
+        dialogueParts[part] = dialogueParts[part].replace('</b>', '')
+        hasBold = true;
+      }
+
   
-      for (let char = 0; char < dialogueText.split("|")[section].length; char++) {
+      for (let char = 0; char < dialogueParts[part].length; char++) {
         if (UI.isPaused) {
           voice.pause();
           await unPause();
         }
         
         if (shouldSkip) {
-          bunch += dialogueText.split("|")[section];
-          dialogueBox.textContent = bunch;
+          dialogueBox.innerHTML = bunch;
           shouldSkip = false;
           break;
         }
   
-        dialogueBox.textContent += dialogueText.split("|")[section][char];
-        await delay(50);
-        
+        if (hasBold && (part * dialogueParts[part].length) + char > boldStart && (part * dialogueParts[part].length) + char < boldEnd) {
+          console.log('eita');
+          dialogueBox.innerHTML += `<b>${dialogueParts[part][char]}</b>`;
+        } else {
+          dialogueBox.innerHTML += dialogueParts[part][char];
+        }
+
+        if (step.dialogue.typeDelay) await delay(step.dialogue.typeDelay);
+        else await delay(50);
       }
       
       voice.pause();
-      if (step.dialogue.content.includes("|") && section < dialogueText.split("|").length-1) {
-        await untilClick();
+      if (step.dialogue.content.includes("|") && part < dialogueParts.length-1) {
+        await untilClick();        
+        dialogueBox.innerHTML = bunch;
+        shouldSkip = false;
       }
     }
     seta.style.display = 'block';
@@ -135,7 +156,17 @@ function Story(story) {
   }
 
   function showBackground(step) {
-    document.body.style.backgroundImage = `url(${step.background})`; 
+    // document.querySelector('.background').style.backgroundImage = `url(${step.background})`; 
+    // document.querySelector('.background').style.display = `block`; 
+
+    handleBackground(step.background)
+
+    if (step.background.includes('show')) {
+      document.querySelector('.'+step.background.split(' ')[1]).style.display = 'block';
+    }
+    if (step.background === 'none') {
+      document.querySelector('.background').display = 'none';
+    }
   };
   function showCharacter(step) {
     currentCharacter = step.character;
@@ -158,6 +189,7 @@ function Story(story) {
       return {
         currentStep: currentStep,
         music: Music.currentMusic,
+        background: currentBackground,
       }
     },
     setOnEnd(fun) {
@@ -172,6 +204,7 @@ function Story(story) {
     },
     load(state) {
       currentStep = state.currentStep;
+      story[currentStep].background = state.background;
     },  
     
     execute() {

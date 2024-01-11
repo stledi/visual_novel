@@ -18,7 +18,7 @@ function Chapter(number, parts) {
         console.log(parts[currentPart]);
         await parts[part].loadMedia();
       }
-      Music.obj.callback(res);
+      res();
     })
   }
 

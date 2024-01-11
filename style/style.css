@@ -1,0 +1,46 @@
+* {
+  padding: 0; margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Comic Sans MS';
+}
+p {
+  font-size: 20px;
+}
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.pause-div p {
+  margin-right: 50px;
+} 
+
+.dialogue-box {
+  height: 10px;
+}
+
+p:hover {
+  cursor: pointer;
+}
+.pause-div {
+  width: 100vw; height: 100vh;
+  position: absolute;
+  background-color: white;
+  z-index: 3;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.salvando {
+  justify-self: flex-end;
+  opacity: 0;
+  transition: 500ms ease-in-out;
+  display: block;
+}

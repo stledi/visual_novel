@@ -1,0 +1,77 @@
+body {
+  width: 100vw; height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.dialogue-box {
+  position: relative;
+  width: 60%; height: 30%;
+  min-width: 700px;
+  border: 10px solid transparent;
+  border-image: url(../img/border.png) 3.5% fill;
+  padding: 15px;
+}
+
+.seta {
+  display: none;
+  animation: piscar ease-in-out 1s infinite alternate;
+  position: absolute;
+  top: 100%; left: 100%;
+  transform: translate(-100%, -100%);
+  height: 50px;
+}
+
+section {
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+  section {
+    flex-direction: column-reverse;
+  }
+  .choice-box {
+    width: 100%;
+  }
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+.choice {
+  width: 100%; height: 55px;
+  background-color: white;
+  border: 5px solid transparent;
+  display: flex;
+  padding: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  align-items: center;
+  margin: 10px;
+  border-image: url(../img/border.png) 4% round;
+}
+.choice:hover {
+  border-image: url(../img/border.png) 3% round;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.background {
+  width: 100vw; height: 100vh;
+  z-index: -1;
+  position: absolute;
+}
+
+@keyframes piscar {
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+}
+

@@ -15,25 +15,17 @@ function getDuration(src) {
   });
 }
 
+Music.obj = new SeamlessLoop();
+async function addMusic(src) {
+  Music.obj.addUri(src, ((await getDuration(src)) * 1000), src);
+}
+
 async function playMusic(src, volume) {
-  if (Music.obj != undefined) {
-    console.log('parou');
-    Music.obj.stop();
-  }
-
-  Music.obj = new SeamlessLoop();
+  if (Music.alreadyPlaying) Music.obj.stop();
   Music.currentMusic = src;
-  Music.obj.addUri(src, ((await getDuration(src)) * 1000), `music`);
-
-  
-  Music.obj.callback(() => {
-    Music.obj.start(`music`);
-    if (volume != undefined) {
-      Music.obj.volume(volume); 
-    }
-    
-    Music.alreadyPlaying = true;
-  });
+  Music.obj.start(src);
+  Music.obj.volume(volume);
+  Music.alreadyPlaying = true;
 }
 
 function stopMusic() {

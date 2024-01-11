@@ -206,7 +206,24 @@ function Story(story) {
       currentStep = state.currentStep;
       story[currentStep].background = state.background;
     },  
-    
+    getCurrentStep() {
+      return currentStep
+    },
+    async loadMedia() {
+      for (let i = currentStep; i < story.length; i++) {
+        if (story[i].music != undefined) {
+          if (story[i].music.src != undefined) await addMusic(story[i].music.src);
+        }
+        if (story[i].character != undefined) {
+          const image = new Image();
+          image.src = story[i].character;
+        }
+        if (story[i].background != undefined && !story[i].background.includes("show") && !story[i].background.includes("hide")) {
+          const image = new Image();
+          image.src = story[i].background;
+        }
+      }
+    },
     execute() {
       return new Promise(async res => {
         console.log(currentStep);

@@ -13,6 +13,15 @@ function Chapter(number, parts) {
     parts[currentPart].load(saveState.partState);
   }
 
+  function loadingMedia() {
+    return new Promise(async res => {
+      for (let part = currentPart; part < parts.length; part++) {
+        await parts[part].loadMedia();
+      }
+      Music.obj.callback(res);
+    })
+  }
+
   return {
     setOnEnd(fun) {
       onend = fun;
@@ -21,6 +30,7 @@ function Chapter(number, parts) {
       if (localStorage.getItem('hasToLoad') === '1') {
         await load();
       }
+      await loadingMedia();
       for (currentPart; currentPart < parts.length; currentPart++) {
         await parts[currentPart].execute();
       }

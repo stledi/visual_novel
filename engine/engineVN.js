@@ -211,6 +211,7 @@ function Story(story) {
     },
     async loadMedia() {
       for (let i = currentStep; i < story.length; i++) {
+        console.log(story[i]);
         if (story[i].music != undefined) {
           if (story[i].music.src != undefined) await addMusic(story[i].music.src);
         }

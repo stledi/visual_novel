@@ -15,6 +15,7 @@ function Chapter(number, parts) {
   function loadingMedia() {
     return new Promise(async res => {
       for (let part = currentPart; part < parts.length; part++) {
+        console.log(parts[currentPart]);
         await parts[part].loadMedia();
       }
       Music.obj.callback(res);

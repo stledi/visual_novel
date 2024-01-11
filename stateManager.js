@@ -11,6 +11,7 @@ function loadChapter(chapter, legitTag) {
 } 
 
 function save(currentChapter, currentPart, partState) {
+  console.log(UI.currentBackground)
   localStorage.setItem('saveState', JSON.stringify({
     currentChapter: currentChapter,
     currentPart: currentPart,
@@ -23,19 +24,17 @@ function save(currentChapter, currentPart, partState) {
 }
 
 function loadUI(saveState) {
-  return new Promise(res => {
+  return new Promise(async res => {
     console.log(saveState);
     if (saveState.background != undefined) document.body.style.backgroundImage =  saveState.background;
     if (saveState.character != undefined) document.querySelector('.character').src = saveState.character;
-    if (saveState.background != undefined) handleBackground(saveState.background);
-    if (saveState.music != "") {
-      window.addEventListener('click', async function eventHandler(ev) { 
-        playMusic(saveState.music);
-        this.removeEventListener('click', eventHandler);
-        res();
-      })
-    } else {
-      res();
+    if (saveState.background != undefined) {
+      handleBackground(saveState.background);
     }
+    if (saveState.music != "") {
+      await addMusic(saveState.music);
+      playMusic(saveState.music);
+    }
+    res();
   })
 }

@@ -1,0 +1,20 @@
+body {
+  width: 100vw; height: 90vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  background-image: url(../img/sprites/bgmenu.gif);
+  background-size: cover;
+  background-position: center;
+}
+
+body div {
+  display: flex;
+  justify-content: space-around;
+  width: 300px;
+}
+
+p {
+  font-size: 30px;
+}
